@@ -18,7 +18,7 @@
                                 Admnistrar las cuentas y roles de usuarios.
                             </p>
                             <!-- Table with stripped rows -->
-                            <a href="{{ route("usuarios.create") }}" class="btn btn-primary">
+                            <a href="{{ route('usuarios.create') }}" class="btn btn-primary">
                                 <i class="fa-solid fa-user-plus"></i> Agregar
                             </a>
                             <hr>
@@ -36,35 +36,8 @@
                                         </th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    @foreach ($items as $item)
-                                        <tr class="text-center">
-                                            <td>{{ $item->id }}</td>
-                                            <td>{{ $item->email }}</td>
-                                            <td>{{ $item->name }}</td>
-                                            <td>{{ $item->rol }}</td>
-                                            <td>
-                                                <a href="" class="btn btn-secondary">
-                                                    <i class="fa-solid fa-user-lock"></i>
-                                                </a>
-                                            </td>
-                                            <td>
-                                                @if ($item->activo)
-                                                    <span class="badge bg-success">Activo</span>
-                                                @else
-                                                    <span class="badge bg-warning text-dark">Inactivo</span>
-                                                @endif
-                                            </td>
-                                            <td>
-                                                <a href="#" class="btn btn-info">
-                                                    <i class="fa-solid fa-user-pen"></i>
-                                                </a>
-                                                <a href="#" class="btn btn-danger">
-                                                    <i class="fa-solid fa-user-gear"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    @endforeach
+                                <tbody id="tbody-usuarios">
+                                    @include('modules.usuarios.tbody')
                                 </tbody>
                             </table>
                             <!-- End Table with stripped rows -->
@@ -75,4 +48,86 @@
         </section>
 
     </main>
+    @include('modules.usuarios.modal_cambiar_password')
 @endsection
+
+@push('scripts')
+    <script>
+        function recargar_tbody() {
+            $.ajax({
+                type: "GET",
+                url: "{{ route('usuarios.tbody') }}",
+                success: function(respuesta) {
+                    console.log(respuesta);
+                }
+            });
+        }
+
+        function cambiar_estado(id, estado) {
+            $.ajax({
+                type: "GET",
+                url: "usuarios/cambiar-estado/" + id + "/" + estado,
+                success: function(respuesta) {
+                    if (respuesta == 1) {
+                        Swal.fire({
+                            title: 'Exito!',
+                            text: 'Cambio de estado exitoso!',
+                            icon: 'success',
+                            confirmButtonText: 'Aceptar'
+                        });
+                        recargar_tbody();
+                    } else {
+                        Swal.fire({
+                            title: 'Fallo!',
+                            text: 'No se llevo a cabo el cambio!',
+                            icon: 'error',
+                            confirmButtonText: 'Aceptar'
+                        });
+                    }
+                }
+            });
+        }
+
+        function agregar_id_usuario(id) {
+            $('#id_usuario').val(id);
+        }
+
+        function cambio_password() {
+            let id = $('#id_usuario').val();
+            let password = $('#password').val();
+
+            $.ajax({
+                type: "GET",
+                url: "usuarios/cambiar-password/" + id + "/" + password,
+                success: function(respuesta) {
+                    if (respuesta == 1) {
+                        Swal.fire({
+                            title: 'Exito!',
+                            text: 'Cambio de password exitoso!',
+                            icon: 'success',
+                            confirmButtonText: 'Aceptar'
+                        });
+                        $('#frmPassword')[0].reset();
+                    } else {
+                        Swal.fire({
+                            title: 'Fallo!',
+                            text: 'Cambio de password no exitoso!',
+                            icon: 'error',
+                            confirmButtonText: 'Aceptar'
+                        });
+                    }
+                }
+            });
+
+            return false;
+        }
+
+        $(document).ready(function() {
+            $('.form-check-input').on("change", function() {
+                let id = $(this).attr("id");
+                let estado = $(this).is(":checked") ? 1 : 0;
+                cambiar_estado(id, estado);
+            });
+        });
+    </script>
+@endpush

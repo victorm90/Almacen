@@ -19,15 +19,14 @@
 
                                 <div class="card-body">
 
+                                    <img src="{{ asset('img/login.jpg') }}" alt="" class="img-fluid">
                                     <div class="pt-4 pb-2">
-                                        <h5 class="card-title text-center pb-0 fs-4">Inicio de Session</h5>
-                                        <p class="text-center small">Ingresa tu usuario y contraseña de acceso</p>
+                                        <h5 class="card-title text-center pb-0 fs-4">Escriba sus credenciales</h5>
+
                                     </div>
 
-                                    <form class="row g-3 needs-validation" novalidate 
-                                    method="POST"
-                                        action="{{ route('logear') }}"
-                                        >
+                                    <form class="row g-3 needs-validation" novalidate method="POST"
+                                        action="{{ route('logear') }}">
                                         @csrf
                                         <div class="col-12">
                                             <label for="yourUsername" class="form-label">Usuario</label>
@@ -78,7 +77,7 @@
                                 <!-- You can delete the links only if you purchased the pro version. -->
                                 <!-- Licensing information: https://bootstrapmade.com/license/ -->
                                 <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-                                Designed by <a target="_blank" href="https://bootstrapmade.com/">BootstrapMade</a>
+                                Desarrollado por <a target="_blank" href="https://bootstrapmade.com/">PorVouseCode</a>
                             </div>
 
                         </div>

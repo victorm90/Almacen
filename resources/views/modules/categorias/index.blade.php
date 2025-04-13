@@ -66,9 +66,9 @@
         <section class="section dashboard">
 
         </section>
-    </main>
-    
+    </main>  
 
 @endsection
+
 
 

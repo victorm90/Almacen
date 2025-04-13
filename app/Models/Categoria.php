@@ -12,4 +12,11 @@ class Categoria extends Model
     ];
     
     protected $table = 'categorias';
+
+
+    public function user(){
+        $this->return;
+    }
+
+    
 }
