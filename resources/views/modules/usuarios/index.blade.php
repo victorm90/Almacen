@@ -4,43 +4,51 @@
 
 @section('contenido')
     <main id="main" class="main">
-        <div class="pagetitle">
-            <h1>Usuarios</h1>
-
-        </div><!-- End Page Title -->
+        <div class="pagetitle mb-4">
+            <h1 class="fw-bold text-primary">Gestión de Usuarios</h1>
+        </div>
+        
         <section class="section">
             <div class="row">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Administrar Usuarios</h5>
-                            <p>
-                                Admnistrar las cuentas y roles de usuarios.
-                            </p>
-                            <!-- Table with stripped rows -->
-                            <a href="{{ route('usuarios.create') }}" class="btn btn-primary">
-                                <i class="fa-solid fa-user-plus"></i> Agregar
+                <div class="col-12">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-white d-flex justify-content-between align-items-center py-3 border-bottom">
+                            <h5 class="card-title mb-0 text-secondary">
+                                <i class="fas fa-users-cog me-2"></i>Listado de Usuarios
+                            </h5>
+                            <a href="{{ route('usuarios.create') }}" class="btn btn-primary rounded-pill">
+                                <i class="fa-solid fa-user-plus me-2"></i>Nuevo
                             </a>
-                            <hr>
-                            <table class="table datatable">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center">ID</th>
-                                        <th class="text-center">Email</th>
-                                        <th class="text-center">Nombre</th>
-                                        <th class="text-center">Rol</th>
-                                        <th class="text-center">Cambio password</th>
-                                        <th class="text-center">Activo</th>
-                                        <th class="text-center">
-                                            Acciones
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tbody-usuarios">
-                                    @include('modules.usuarios.tbody')
-                                </tbody>
-                            </table>
-                            <!-- End Table with stripped rows -->
+                        </div>
+        
+                        <div class="card-body pt-4">
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle datatable">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th class="text-center">ID</th>
+                                            <th class="text-center">Email</th>
+                                            <th class="text-center">Nombre</th>
+                                            <th class="text-center">Rol</th>
+                                            <th class="text-center" style="width: 12%">Password</th>
+                                            <th class="text-center" style="width: 10%">Estado</th>
+                                            <th class="text-center" style="width: 15%">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbody-usuarios" class="border-top-0">
+                                        @include('modules.usuarios.tbody')
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <!-- Opcional: Footer con estadísticas -->
+                        <div class="card-footer bg-light">
+                            <div class="text-muted small">
+                                <span class="me-3"><i class="fas fa-database me-1"></i> Total registros: {{ $estadisticas->total }}</span>
+                                <span class="me-3"><i class="fas fa-check-circle text-success me-1"></i> Activos: {{ $estadisticas->activos }}</span>
+                                <span><i class="fas fa-times-circle text-danger me-1"></i> Inactivos:{{ $estadisticas->inactivos }}</span>
+                            </div>
                         </div>
                     </div>
                 </div>

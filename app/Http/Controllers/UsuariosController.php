@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -15,8 +16,20 @@ class UsuariosController extends Controller
     public function index()
     {
         $titulo = "Usuarios";
-        $items = User::all();
-        return view('modules.usuarios.index', compact('items', 'titulo'));
+    $items = User::all();
+    
+    // Consulta única para obtener todas las estadísticas
+    $estadisticas = User::selectRaw('
+        COUNT(*) as total,
+        SUM(CASE WHEN activo = 1 THEN 1 ELSE 0 END) as activos,
+        SUM(CASE WHEN activo = 0 THEN 1 ELSE 0 END) as inactivos
+    ')->first();
+
+    return view('modules.usuarios.index', compact(
+        'items',
+        'titulo',
+        'estadisticas'
+    ));
     }
 
     /**
@@ -72,14 +85,20 @@ class UsuariosController extends Controller
     public function update(Request $request, string $id)
     {
         try {
-            $item = User::find($id);
-            $item->name = $request->name;
-            $item->email = $request->email;
-            $item->rol = $request->rol;
-            $item->save();
-            return to_route('usuarios')->with('success', 'Usuario actualizado con exito!');
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|unique:users,email,'.$id,
+                'rol' => 'required|in:admin,cajero'
+            ]);
+    
+            $user = User::findOrFail($id);
+            $user->update($request->all());
+    
+            return redirect()->route('usuarios')->with('success', '¡Usuario actualizado con éxito!');
+        } catch (ModelNotFoundException $e) {
+            return redirect()->route('usuarios')->with('error', 'Usuario no encontrado');
         } catch (Exception $e) {
-            return to_route('usuarios')->with('error', 'Error al actualizar usuario!' . $e->getMessage());
+            return redirect()->route('usuarios')->with('error', 'Error: ' . $e->getMessage());
         }
     }
 

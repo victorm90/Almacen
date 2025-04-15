@@ -83,12 +83,25 @@
   <script src="{{ asset('NiceAdmin/assets/js/main.js') }}"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+ 
+
   <script>
     $('.datatable').DataTable({
         layout: {
             topStart: {
-                buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
-            }
+                buttons: [
+        {
+            extend: 'excel',
+            text: '<i class="fas fa-file-excel me-2"></i> Excel',
+            className: 'btn btn-success btn-sm'
+        },
+        {
+            extend: 'pdf',
+            text: '<i class="fas fa-file-pdf me-2"></i> PDF',
+            className: 'btn btn-danger btn-sm'
+        }
+    ]
+            } 
         },
         language: {
           "decimal": "",
@@ -104,10 +117,10 @@
           "search": "Buscar:",
           "zeroRecords": "Sin resultados encontrados",
           "paginate": {
-              "first": "Primero",
-              "last": "Ultimo",
-              "next": "Siguiente",
-              "previous": "Anterior"
+              "first": "<i class='fas fa-angle-double-left'></i>",
+            "last": "<i class='fas fa-angle-double-right'></i>",
+            "next": "<i class='fas fa-angle-right'></i>",
+            "previous": "<i class='fas fa-angle-left'></i>"
           }
         }
         
